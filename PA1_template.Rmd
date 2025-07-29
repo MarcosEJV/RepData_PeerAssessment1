@@ -94,5 +94,36 @@ As we know now, there is a total of `r NAstotales` missing values in the steps c
 sum(is.na(tabla$steps))
 ```
 
+Now, we are going to fill those NAs with the mean value for each interval using the 
+
+```{r}
+tablallena <- tabla %>% mutate_all(~replace(., is.na(.), tablaporintervalo$Mean_steps))
+```
+
+We can compare both tables and notice that the NAs are gone:
+
+```{r}
+head(tabla)
+
+head(tablallena)
+
+sum(is.na(tabla$steps))
+
+sum(is.na(tablallena$steps))
+```
+
+Now, we can build the same histogram, calculate the mean and median of the table without NAs and compare this information against the original.
+
+```{r}
+tablallenaporfecha <- tablallena %>% group_by(date) %>% summarise(Total_steps = sum(steps))
+
+hist(tablallenaporfecha$Total_steps, xlab = "Total steps", main = "Histogram of the total number of steps taken each day without NAs", breaks = 10)
+
+mean(tablallenaporfecha$Total_steps)
+
+median(tablallenaporfecha$Total_steps)
+```
+
+We can see the mean and media do not change to much. However, looking closely to the histogram, we can see that the amount of data in the middle of the histogram increase. The approach we took for filling the NA values can trick us about the real dispersion of the data when compared to the original file.
 
 ## Are there differences in activity patterns between weekdays and weekends?
