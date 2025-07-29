@@ -67,11 +67,32 @@ median(tablaporfecha$Total_steps)
 ```
 
 ## What is the average daily activity pattern?
+To solve this question, we will group the table but using the 5-minute interval, instead of the date.
 
+```{r}
+tablaporintervalo <- tablanoNAs %>% group_by(interval) %>% summarise(Mean_steps = mean(steps))
 
+head(tablaporintervalo)
+```
+
+Finally we build the plot using the base plotting system:
+
+```{r}
+plot(tablaporintervalo$interval, tablaporintervalo$Mean_steps, "l", xlab = "Interval", ylab = "Mean steps", main = "Average number of steps taken by interval")
+```
 
 ## Imputing missing values
 
+```{r, echo = FALSE, results = "hide"}
+NAstotales <- sum(is.na(tabla$steps))
+
+```
+
+As we know now, there is a total of `r NAstotales` missing values in the steps column in the original data. We know this after we ran the command:
+
+```{r, results = 'asis'}
+sum(is.na(tabla$steps))
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
