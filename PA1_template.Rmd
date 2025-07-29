@@ -4,8 +4,6 @@ output:
   html_document:
     keep_md: true
 ---
-
-
 ## Loading and preprocessing the data
 For loading the data, you need to set your working directory in the same location as the file and then use the command "read.csv" as follows:
 
@@ -44,12 +42,14 @@ For this, we need to assign the date column as a factor to calculate the mean by
 library(dplyr, warn.conflicts = FALSE)
 
 tablaporfecha <- tablanoNAs %>% group_by(date) %>% summarise(Total_steps = sum(steps))
+
+head(tablaporfecha)
 ```
 
-Once the table is grouped, we can generate an histogram using the base ploting system:
+Once the table is grouped, we can generate an histogram using the base ploting system. Lets modify the breaks in the histogram so we can have a better idea of how is the information distributed across the dates:
 
 ```{r}
-hist(tablaporfecha$Total_steps, xlab = "Total steps", main = "Histogram of the total number of steps taken each day")
+hist(tablaporfecha$Total_steps, xlab = "Total steps", main = "Histogram of the total number of steps taken each day", breaks = 10)
 ```
 
 Furthermore, the mean and median of the steps taken by day can be found using the "summary" function:
