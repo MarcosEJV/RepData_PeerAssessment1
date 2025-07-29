@@ -7,12 +7,64 @@ output:
 
 
 ## Loading and preprocessing the data
+For loading the data, you need to set your working directory in the same location as the file and then use the command "read.csv" as follows:
 
+```{r}
+tabla <- read.csv("./activity.csv")
+```
 
+As you can see, I assigned the table information to the variable "tabla". We can see the content of tabla using "head":
+
+```{r}
+head(tabla)
+```
+
+As you can see, the variable contains the require information. To continue working with the table, we will erase the NA values in a new variable called "tablanoNAs" and we will check the content using the same head command.
+
+```{r}
+tablanoNAs <- na.omit(tabla)
+head(tablanoNAs)
+```
+
+You can confirm the NA deletion using the next command:
+
+```{r}
+sum(is.na(tabla$steps))
+
+sum(is.na(tablanoNAs$steps))
+```
+
+You will notice that there are no more NA rows in the steps column. So now we can process our data.
 
 ## What is mean total number of steps taken per day?
 
+For this, we need to assign the date column as a factor to calculate the mean by day. We can use the dplyr Package to group the data and assign it to a new variable. In the new table, the column with the sum of steps for each day will be called "Total_steps".
 
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+
+tablaporfecha <- tablanoNAs %>% group_by(date) %>% summarise(Total_steps = sum(steps))
+```
+
+Once the table is grouped, we can generate an histogram using the base ploting system:
+
+```{r}
+hist(tablaporfecha$Total_steps, xlab = "Total steps", main = "Histogram of the total number of steps taken each day")
+```
+
+Furthermore, the mean and median of the steps taken by day can be found using the "summary" function:
+
+```{r}
+summary(tablaporfecha)
+```
+
+Or it can be calculated using the corresponding function as follows:
+
+```{r}
+mean(tablaporfecha$Total_steps)
+
+median(tablaporfecha$Total_steps)
+```
 
 ## What is the average daily activity pattern?
 
