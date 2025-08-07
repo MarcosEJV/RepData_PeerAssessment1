@@ -124,6 +124,61 @@ mean(tablallenaporfecha$Total_steps)
 median(tablallenaporfecha$Total_steps)
 ```
 
-We can see the mean and media do not change to much. However, looking closely to the histogram, we can see that the amount of data in the middle of the histogram increase. The approach we took for filling the NA values can trick us about the real dispersion of the data when compared to the original file.
+We can see the mean and media do not change to much. However, looking closely to the histogram (next figure), we can see that the amount of data in the middle of the histogram increase. The approach we took for filling the NA values can trick us about the real dispersion of the data when compared to the original file.
+
+```{r}
+par(mfrow = c(1, 2))
+
+hist(tablaporfecha$Total_steps, xlab = "Total steps", main = "Histogram with NAs", breaks = 10)
+
+hist(tablallenaporfecha$Total_steps, xlab = "Total steps", main = "Histogram NAs replaced", breaks = 10)
+
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+Using the filled up table, we will compare the interval activity in weekdays versus weekends. First, we create a new column which contains the weekday by using the weekdays function. We can check the new table content using summary, and the content of the new column by using the unique function:
+
+```{r}
+tablallena$weekday <- weekdays(as.Date(tablallena$date, format = "%Y-%m-%d"))
+
+head(tablallena)
+
+unique(tablallena$weekday)
+```
+
+Then, we will create a factor using this new column by replacing each of the days by either "Weekday" or "Weekend". We can check the replacement of the values using the same unique function:
+
+```{r}
+tablallena$weekday[tablallena$weekday == "Monday"] <- "Weekday"
+tablallena$weekday[tablallena$weekday == "Tuesday"] <- "Weekday"
+tablallena$weekday[tablallena$weekday == "Wednesday"] <- "Weekday"
+tablallena$weekday[tablallena$weekday == "Thursday"] <- "Weekday"
+tablallena$weekday[tablallena$weekday == "Friday"] <- "Weekday"
+
+tablallena$weekday[tablallena$weekday == "Saturday"] <- "Weekend"
+tablallena$weekday[tablallena$weekday == "Sunday"] <- "Weekend"
+
+unique(tablallena$weekday)
+
+```
+
+As a final step, we calculate the mean for the intervals by building 2 tables and binding them at the end. Then we can plot the steps by interval for the weekdays and the weekends using ggplot2:
+
+```{r}
+tablaweekday <- tablallena %>% filter(weekday == "Weekday") %>% group_by(interval) %>% summarise(steps.mean = mean(steps)) %>% cbind(weekday = "Weekday")
+tablaweekend <- tablallena %>% filter(weekday == "Weekend") %>% group_by(interval) %>% summarise(steps.mean = mean(steps)) %>% cbind(weekday = "Weekend")
+
+tablaparaplot <- tablaweekday %>% rbind(tablaweekend) %>% group_by(weekday)
+
+library(ggplot2)
+
+ggplot(tablaparaplot) +
+  geom_line(aes(interval, steps.mean), color = "blue") +
+  facet_grid(vars(weekday)) +
+  labs(y = "Average steps by interval", title = "Comparison of average steps on the week vs on the weekend")
+  
+
+```
+
+And that would be all. Thank you.
