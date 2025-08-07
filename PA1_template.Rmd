@@ -7,6 +7,10 @@ output:
 ## Loading and preprocessing the data
 For loading the data, you need to set your working directory in the same location as the file and then use the command "read.csv" as follows:
 
+```{r global_options, echo = FALSE}
+knitr::opts_chunk$set(fig.path='Figs/')
+```
+
 ```{r}
 tabla <- read.csv("./activity.csv")
 ```
