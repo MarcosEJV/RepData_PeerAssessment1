@@ -164,12 +164,17 @@ head(tablaporintervalo)
 
 Finally we build the plot using the base plotting system:
 
-
 ``` r
 plot(tablaporintervalo$interval, tablaporintervalo$Mean_steps, "l", xlab = "Interval", ylab = "Mean steps", main = "Average number of steps taken by interval")
 ```
 
 ![](Figs/unnamed-chunk-10-1.png)<!-- -->
+
+To determine the interval with the highest average steps, we filter the row from the table as follows:
+
+``` r
+filter(tablaporintervalo, tablaporintervalo$Mean_steps == max(tablaporintervalo$Mean_steps))
+```
 
 ## Imputing missing values
 
@@ -348,3 +353,4 @@ ggplot(tablaparaplot) +
 ![](Figs/unnamed-chunk-19-1.png)<!-- -->
 
 And that would be all. Thank you.
+
