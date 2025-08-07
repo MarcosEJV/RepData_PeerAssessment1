@@ -176,6 +176,13 @@ To determine the interval with the highest average steps, we filter the row from
 filter(tablaporintervalo, tablaporintervalo$Mean_steps == max(tablaporintervalo$Mean_steps))
 ```
 
+```
+# A tibble: 1 × 2
+  interval Mean_steps
+     <int>      <dbl>
+1      835       206.
+```
+
 ## Imputing missing values
 
 
@@ -353,4 +360,5 @@ ggplot(tablaparaplot) +
 ![](Figs/unnamed-chunk-19-1.png)<!-- -->
 
 And that would be all. Thank you.
+
 
